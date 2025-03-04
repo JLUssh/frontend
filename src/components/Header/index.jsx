@@ -1,10 +1,7 @@
-// import React from "react";
-
-//
 export default function Header() {
   return (
     <div className="mt-[60px]">
-      <div className="w-full text-center text-[#444] flex flex-col items-center">
+      <div className="w-full text-center text-[#444] flex flex-col items-center select-none">
         <span className="roboto-black-italic block text-[20px] absolute top-[18%]">
           JLU & SSH
         </span>
@@ -14,8 +11,9 @@ export default function Header() {
       </div>
       <img
         className="w-full object-cover h-[450px] mt-[80px]"
-        src="https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-        alt=""
+        // src="https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        src="/api/bkImg"
+        alt="bgImage"
       />
     </div>
   );

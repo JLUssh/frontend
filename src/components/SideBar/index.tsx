@@ -2,17 +2,29 @@ import React, { useEffect, useState } from "react";
 import avatar from "@ass/avatar.jpg";
 import { Link } from "react-router-dom";
 
+interface CategoryInfo {
+  id: number;
+  name: string;
+}
+
 export default function Index() {
   // 只能在组件或自定义组件中使用
   // 首字母要大写
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryInfo[]>([]);
 
   useEffect(() => {
+    let isLoadding = false;
     (async () => {
+      setCategories([]);
       const data = await fetch("/api/category").then((data) => data.json());
       // console.log(data);
-      setCategories(data);
+      if (!isLoadding) {
+        setCategories(data);
+      }
     })();
+    return () => {
+      isLoadding = true;
+    };
   }, []);
 
   return (

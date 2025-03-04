@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
+import useDetchImg from "@/hooks/useDetchImg";
 
 export default function Index() {
   const [name, setName] = useState("");
@@ -8,6 +9,10 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [isReg, setIsReg] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const domRef = useRef(null);
+
+  useDetchImg(domRef, "/api/registerImg");
 
   const navigate = useNavigate();
 
@@ -47,7 +52,10 @@ export default function Index() {
   }
 
   return (
-    <div className="register w-full flex flex-col justify-center items-center relative">
+    <div
+      ref={domRef}
+      className="register w-full flex flex-col justify-center items-center relative"
+    >
       <span className="text-[40px]  roboto-bold">注册页面</span>
       <form className="flex flex-col mt-[20px]" onSubmit={handleSubmit}>
         <label htmlFor="userName" className="my-[10px]">

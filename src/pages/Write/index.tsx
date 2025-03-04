@@ -25,10 +25,9 @@ export default function Write() {
   const [desce, setDesce] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
-  const divRef = useRef(null);
-
-  const editRef = useRef(null),
-    showRef = useRef(null);
+  const divRef = useRef<HTMLDivElement>(null),
+    editRef = useRef<HTMLDivElement>(null),
+    showRef = useRef<HTMLDivElement>(null);
 
   const { user } = useContext(Context);
 
@@ -43,6 +42,7 @@ export default function Write() {
 
   const handleSubmit = async (e: FormEvent) => {
     // 不阻止默认行为，会导致重新提交表单
+    e.stopPropagation();
     e.preventDefault();
 
     const data = new FormData();
@@ -70,7 +70,12 @@ export default function Write() {
       console.log(res);
 
       if (res) {
+        setTitle("");
+        setDesce("");
+        setFile(null);
+        divRef.current && (divRef.current.innerHTML = "");
         window.alert("新博客创建成功!");
+        console.log("here");
       }
     } catch (error) {}
   };
@@ -95,6 +100,9 @@ export default function Write() {
     // margin = parseFloat(getComputedStyle(editDom).padding);
 
     function moveElement(e) {
+      if (!editDom || !showDom) {
+        return;
+      }
       e.stopPropagation();
 
       let currentX = e.clientX;
@@ -170,7 +178,9 @@ export default function Write() {
             id="fileInput"
             // style={{ display: "none" }}
             className="hidden"
-            onChange={(e) => setFile((e.target as HTMLInputElement).files![0])}
+            // onChange={(e) => setFile((e.target as HTMLInputElement).files![0])}
+            // value={file}
+            onChange={(e) => setFile(e.target.files![0])}
           />
           <input
             type="text"
@@ -181,6 +191,7 @@ export default function Write() {
             // }
             className="text-[30px] border-none p-[20px] w-full focus:outline-none"
             autoFocus={true}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -194,10 +205,12 @@ export default function Write() {
               wrap="off"
               placeholder="Tell your story..."
               className="block w-full text-[20px] h-full focus:outline-none  resize-none box-border bg-inherit"
+              value={desce}
               onChange={(e) => {
-                setDesce(e.target.value);
+                let content = e.target.value;
+                setDesce(content);
                 //这里可以加一个节流？
-                newMarkParse(divRef.current, e.target.value);
+                newMarkParse(divRef.current, content);
               }}
             ></textarea>
           </div>

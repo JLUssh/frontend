@@ -1,4 +1,4 @@
-interface baseUserInfo {
+export interface baseUserInfo {
   id: number;
   name: string;
   email: string;
@@ -15,5 +15,6 @@ export interface Action {
 }
 
 export interface CTX extends UserInfo {
-  dispatch: React.Dispatch<Action> | null;
+  dispatch: React.Dispatch<Action>;
+  // setValue: Function;
 }

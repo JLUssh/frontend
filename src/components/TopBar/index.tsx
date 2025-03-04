@@ -8,24 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../store";
 // 重新渲染都涉及不到它，怎么让他进行更新啊？
 const TopBar: React.FC = () => {
-  // const isLogin = true;
-  // console.log("object");
-
-  // console.log(test);
-
   const { user, dispatch } = useContext(Context);
-  // console.log(Context);
-  // console.log("user:", user);
-  // console.log(dispatch);
-  // useEffect(() => {
-
-  // }, [user]);
-
+  console.log(user);
   const navigate = useNavigate();
 
   function handleLogout() {
-    dispatch({
+    dispatch?.({
       type: "LOGOUT",
+      payload: null,
     });
     navigate("/");
   }
@@ -51,10 +41,10 @@ const TopBar: React.FC = () => {
             <Link to="/">主页</Link>
           </li>
           <li className="mx-5 text-xl cursor-pointer hover:text-[#222]">
-            关于
+            <Link to="/aboutMe">关于</Link>
           </li>
           <li className="mx-5  text-xl cursor-pointer hover:text-[#222]">
-            联系
+            <Link to="/concat">联系</Link>
           </li>
 
           {
@@ -95,8 +85,8 @@ const TopBar: React.FC = () => {
             <Link to="/settings">
               <img
                 src={user.avatar_url ? user.avatar_url : avatar}
-                alt="123"
-                className="w-[40px] h-[40px] rounded-full object-cover cursor-pointer mr-2"
+                alt="avatar"
+                className="w-[40px] h-[40px] rounded-full object-cover cursor-pointer mr-2 border-sky-400 border-2"
               />
             </Link>
 

@@ -1,8 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { marked } from "marked";
 
 import { useNavigate, useParams, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
+
+import { Context } from "./../../store";
+import PopUpBox from "@comp/PopUpBox";
+import Mask from "@comp/Mask";
 
 export default function Index() {
   let { postId } = useParams();
@@ -17,10 +21,21 @@ export default function Index() {
     console.log("asdkfsd");
   }
 
+  async function handleDelete() {
+    setShowPopUpBox(true);
+  }
+
   const [post, setPost] = useState({});
+
+  const [showBtn, setShowBtn] = useState<boolean>(false);
+
+  const [showPopUpBox, setShowPopUpBox] = useState<boolean>(false);
+
   const [edit, setEdit] = useState(false);
 
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const { user } = useContext(Context);
 
   useEffect(() => {
     (async () => {
@@ -28,15 +43,25 @@ export default function Index() {
         data.json()
       );
 
+      if (user && user.id === data.user_id) {
+        setShowBtn(true);
+      }
+
       let res = await fetch(`/user/getname?user_id=${data.user_id}`).then(
         (data) => data.json()
       );
       data.userName = res.name;
       setPost(data);
-
-      divRef.current.innerHTML = DOMPurify.sanitize(marked.parse(data.desce));
+      divRef.current &&
+        (divRef.current.innerHTML = DOMPurify.sanitize(
+          marked.parse(data.desce)
+        ));
     })();
   }, [postId]);
+
+  // useEffect(() => {
+  //   if (user && user.id === data)
+  // }, []);
 
   return (
     <div className="flex-[3_3_0%] px-[20px] mt-[20px] justify-center items-center flex-col">
@@ -58,13 +83,19 @@ export default function Index() {
         />
         <div className="text-center text-3xl m-[10px] roboto-bold h-[40px] leading-[40px]">
           {post.title}
-          <div className="float-right text-sm flex items-center justify-center h-full">
-            <i
-              className="iconfont icon-bianji mr-[15px] cursor-pointer text-[teal]"
-              onClick={handleEdit}
-            ></i>
-            <i className="iconfont icon-shanchu  cursor-pointer text-[tomato]"></i>
-          </div>
+
+          {showBtn ? (
+            <div className="float-right text-sm flex items-center justify-center h-full">
+              <i
+                className="iconfont icon-bianji mr-[15px] cursor-pointer text-[teal]"
+                onClick={handleEdit}
+              ></i>
+              <i
+                className="iconfont icon-shanchu  cursor-pointer text-[tomato]"
+                onClick={handleDelete}
+              ></i>
+            </div>
+          ) : null}
         </div>
         {/* <div className="w-f">
           <ul className="flex w-full items-center justify-center text-[#be9656] text-lg mb-[20px] gap-5">
@@ -83,6 +114,35 @@ export default function Index() {
         <span>{new Date(post.createdAt).toLocaleDateString()}</span>
       </div>
       <div ref={divRef} className="w-full h-auto"></div>
+
+      {showPopUpBox ? (
+        <>
+          <Mask></Mask>
+          <PopUpBox
+            content={"请问是否确认删除该博客"}
+            btnArr={[
+              {
+                async handleClick() {
+                  const data = await fetch(`/api/post/${postId}`, {
+                    method: "DELETE",
+                  }).then((data) => data.json());
+                  alert("删除成功");
+                  console.log(data);
+                  setShowPopUpBox(false);
+                  setTimeout(() => {
+                    navigate(-1);
+                  }, 1000);
+                },
+              },
+              {
+                handleClick() {
+                  setShowPopUpBox(false);
+                },
+              },
+            ]}
+          ></PopUpBox>
+        </>
+      ) : null}
     </div>
   );
 }

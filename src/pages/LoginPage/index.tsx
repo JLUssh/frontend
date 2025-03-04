@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import "./index.css";
 import { Link, useNavigate } from "react-router-dom";
+
+import useDetchImg from "@/hooks/useDetchImg";
 
 import { Context } from "../../store";
 // 将用户信息存储到localStorage中，存储到本地
@@ -12,7 +14,35 @@ export default function Index() {
 
   const { dispatch } = useContext(Context);
 
+  const domRef = useRef(null);
+
   const navigate = useNavigate();
+
+  useDetchImg(domRef, "/api/loginImg");
+  // useEffect(() => {
+  //   let controller = new AbortController();
+  //   (async () => {
+  //     try {
+  //       const source = await fetch("/api/loginImg", {
+  //         signal: controller.signal,
+  //       });
+  //       // json 调用 json()  image/webp  调用blob()
+  //       let blob = await source.blob();
+  //       let url = URL.createObjectURL(blob);
+  //       if (domRef.current) {
+  //         domRef.current.style.backgroundImage = `url(${url})`;
+  //       }
+  //       console.log(source);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+
+  //   return () => {
+  //     // 中断请求
+  //     controller.abort("cancel request");
+  //   };
+  // }, []);
 
   async function handleSubmit(e) {
     //阻止表单提交的默认行为：重新刷新页面
@@ -31,6 +61,7 @@ export default function Index() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       // // body data type must match "Content-Type" header
       body: newD,
@@ -72,7 +103,10 @@ export default function Index() {
   }
 
   return (
-    <div className="loginPage w-full flex flex-col justify-center items-center relative">
+    <div
+      ref={domRef}
+      className="loginPage w-full flex flex-col justify-center items-center relative"
+    >
       <span className="text-[40px] roboto-bold">登录页面</span>
       <form className="flex flex-col mt-[20px]" onSubmit={handleSubmit}>
         <label htmlFor="userEmail" className="my-[10px]">

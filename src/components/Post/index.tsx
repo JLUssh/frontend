@@ -12,11 +12,12 @@ interface IProps {
     createdAt: string;
     desce: string;
   };
+  children: React.Component;
 }
 
-const Index: React.FC<IProps> = (props) => {
+const Post: React.FC<IProps> = ({ info }) => {
   //
-  const { info, children } = props;
+  // const { info, children } = props;
   // console.log(props);
   // 没有给图片的话，使用默认图片
   const [labels, setLabels] = useState([]);
@@ -37,17 +38,17 @@ const Index: React.FC<IProps> = (props) => {
 
   return (
     <div className="flex mb-[40px] h-[200px] w-full">
-      {/* <div className="w-[300px] h-full"> */}
       {info.photo ? (
         <div className="w-[300px] h-full">
-          <img
-            src={info.photo}
-            alt=""
-            className="w-full h-full object-cover rounded-[5px] cursor-pointer"
-          />
+          <Link to={`/post/${info.id}`}>
+            <img
+              src={info.photo}
+              alt="placeholder"
+              className="w-full h-full object-cover rounded-[5px] cursor-pointer"
+            />
+          </Link>
         </div>
       ) : null}
-      {/* </div> */}
       <div className="flex flex-col justify-between w-full px-5">
         <div className="flex justify-between w-full">
           <span className="text-[20px] hover:text-[#888] cursor-pointer">
@@ -68,13 +69,11 @@ const Index: React.FC<IProps> = (props) => {
             {labels.map((label) => (
               <li
                 key={label}
-                className="rounded-[5px] px-2 border-2 text-[#be9656] leading-[26px]"
+                className="rounded-[5px] px-2 border-2 text-[#be9656] leading-[26px] select-none"
               >
                 {label}
               </li>
             ))}
-            {/* <li className="rounded-[5px] p-1 border-2 text-[#be9656]">Node</li>
-            <li className="rounded-[5px] p-1 border-2 text-[#be9656]">React</li> */}
           </ul>
         </div>
       </div>
@@ -82,4 +81,4 @@ const Index: React.FC<IProps> = (props) => {
   );
 };
 
-export default Index;
+export default Post;

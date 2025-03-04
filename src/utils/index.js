@@ -24,3 +24,9 @@ export function debounce (handler, time) {
         }, time);
     };
 }
+
+//将A的内容混入到B中
+export function Mixin (A, B) {
+    // let newA = structuredClone(A);
+    return Object.assign(A, B);
+}

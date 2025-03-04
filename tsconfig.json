@@ -9,7 +9,8 @@
       "@/*": ["./src/*"],
       "@pag/*": ["./src/pages/*"],
       "@ass/*": ["./src/assets/*"],
-      "@comp/*": ["./src/components/*"]
+      "@comp/*": ["./src/components/*"],
+      "@store/*": ["./src/store/*"]
     },
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,

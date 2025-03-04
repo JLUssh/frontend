@@ -7,7 +7,7 @@ import Settings from "@pag/Settings";
 import Write from "@pag/Write";
 import ImageAll from "@pag/ImageAll";
 import ErrorPage from "@pag/ErrorPage";
-
+import Concat from "@pag/Concat";
 // import React, { useEffect } from "react";
 import React, { useEffect } from "react";
 
@@ -22,6 +22,7 @@ import {
 import { withScrollTop } from "./hoc";
 
 import { ContextProvider } from "./store";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // const NewHomePage = withScrollTop(Homepage);
 
@@ -31,6 +32,7 @@ const ContextLayout = () => (
     <Outlet />
   </ContextProvider>
 );
+
 //有一个这样的路由配置文件
 const router = createBrowserRouter([
   {
@@ -53,11 +55,27 @@ const router = createBrowserRouter([
       },
       {
         path: "settings",
-        element: <Settings />,
+        element: (
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "write",
-        element: <Write />,
+        element: (
+          <ProtectedRoute>
+            <Write />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "concat",
+        element: <Concat />,
+      },
+      {
+        path: "aboutMe",
+        element: <Concat />,
       },
       {
         path: "post/:postId",

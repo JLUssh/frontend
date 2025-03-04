@@ -15,6 +15,7 @@ module.exports = merge(base, {
         hot: true, //实现热替换 HMR hot module replacement
         // compress: true,
         historyApiFallback: true,
+        //服务器端反向代理
         proxy: [{
             context: ["/api", "/user", "/uploads"],
             target: "http://localhost:5000"

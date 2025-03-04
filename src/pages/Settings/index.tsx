@@ -1,16 +1,20 @@
 import React, { FormEvent, useContext, useState } from "react";
-import SideBar from "@comp/SideBar";
+import SideBar from "@/components/SideBar";
 import "./index.css";
 
 import { Context } from "../../store";
+import avatar from "@ass/avatar.jpg";
 
 const Index: React.FC = () => {
   const { user, dispatch } = useContext(Context);
+  if (!user) {
+    return;
+  }
 
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.name);
   const [password, setPassword] = useState("");
-  const [file, setFile] = useState<File>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   function handleFile(e) {
     // console.log(e.target.files[0]);
@@ -82,7 +86,13 @@ const Index: React.FC = () => {
           <div className="flex items-center my-[10px]">
             <img
               // src="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              src={file ? URL.createObjectURL(file) : user.avatar_url}
+              src={
+                file
+                  ? URL.createObjectURL(file)
+                  : user.avatar_url
+                  ? user?.avatar_url
+                  : avatar
+              }
               alt=""
               className="h-[70px] w-[70px] rounded-[20px] object-cover"
             />

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import SinglePost from "@comp/SinglePost";
-import SideBar from "@comp/SideBar";
+import SideBar from "@/components/SideBar";
 export default function Index() {
   useEffect(() => {
     window.scrollTo(0, 0);
