@@ -10,6 +10,7 @@ export default function Posts() {
   const navigate = useNavigate();
   // console.log("Search", search);
 
+  // 不管是按条件还是全部，都做懒加载
   useEffect(() => {
     async function fetchSpecPost(search) {
       setPosts([]);
