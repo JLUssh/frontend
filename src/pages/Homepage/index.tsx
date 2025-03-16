@@ -1,10 +1,11 @@
-import Header from "@comp/Header";
-import Posts from "@comp/Posts";
-import SideBar from "@/components/SideBar";
+import Header from "@/components/Header";
+import Posts from "@/components/Posts";
+// import SideBar from "@/components/SideBar";
 
 import React, { useEffect } from "react";
 
 import { getAllPosts } from "@/contacts";
+import Calendar from "@/components/Calendar";
 
 export const loader = async () => {
   const data = await getAllPosts();
@@ -16,19 +17,22 @@ export default function Index() {
     const controller = new AbortController();
     (async () => {
       try {
-        // let info = await fetch("http://localhost:5000/getInfo", {
-        //   // body: JSON.stringify("123"),
-        //   mode: "cors",
-        //   credentials: "include",
-        //   signal: controller.signal,
-        // }).then((data) => data.json());
-        let response = await fetch("http://localhost:5000/getInfo", {
-          // body: JSON.stringify("123"),
+        console.log("here");
+        const request = new Request("http://localhost:5000/getInfo", {
           mode: "cors",
           credentials: "include",
           signal: controller.signal,
         });
+
+        let response = await fetch(request);
+        // let response = await fetch("http://localhost:5000/getInfo", {
+        //   // body: JSON.stringify("123"),
+        //   mode: "cors",
+        //   credentials: "include",
+        //   signal: controller.signal,
+        // });
         console.log("response.status:");
+        console.log(response);
         console.log(response.status);
         console.log(response.ok);
         let data = await response.json();
@@ -73,6 +77,7 @@ export default function Index() {
       <Header />
       <div className="flex">
         <Posts></Posts>
+        <Calendar />
       </div>
     </>
   );

@@ -55,6 +55,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                // 限制loader的作用范围
                 include: path.resolve(__dirname, '../src'),
                 use: [
                     // 想要自动挂载样式，style-loader 可以帮我们实现，它负责将 css 样式通过 style 标签插入到 DOM 中。
@@ -162,7 +163,7 @@ module.exports = {
         // new webpack.DllReferencePlugin({
         //     manifest: require('../dll/$.manifest.json')
         // })
-        // new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin()
     ],
 
     //构建过程中控制台的输出内容

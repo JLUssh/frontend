@@ -58,15 +58,26 @@ export default function Write() {
 
     try {
       // 主要是这个res使得state发生改变
-      const res = await fetch("/user/" + user?.id + "/uploadPost", {
+      let res = await fetch("/user/" + user?.id + "/uploadPost", {
         method: "PUT",
         // headers: {
         //   "Content-Type": "multipart/form-data",
         // },
         // body: JSON.stringify(file),
         body: data,
-      }).then((data) => data.json());
+      });
+      // 通过res.ok 进行初步的判断，然后根据相应的状态码，去进行更加详细的判断，显示不同的内容
 
+      if (!res.ok) {
+        console.log("res.ok:");
+        console.log(res.ok);
+        console.log(res.status);
+        setDesce("");
+        divRef.current && (divRef.current.innerHTML = "");
+        window.alert("博客内容超出范围");
+        return;
+      }
+      res = await res.json();
       console.log(res);
 
       if (res) {
@@ -77,7 +88,9 @@ export default function Write() {
         window.alert("新博客创建成功!");
         console.log("here");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleMouseDown = useCallback(function handleMouseDown(e) {

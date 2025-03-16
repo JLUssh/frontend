@@ -1,6 +1,6 @@
 import { UserInfo, Action } from "src/typescript/interfaces";
 
-const reducer = function (state: UserInfo, action: Action): UserInfo {
+const reducer = function (state: UserInfo, action: Action) {
   // action type / payload
   switch (action.type) {
     case "LOGIN_SUCCESS":

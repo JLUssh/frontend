@@ -8,6 +8,15 @@ import { Context } from "./../../store";
 import PopUpBox from "@comp/PopUpBox";
 import Mask from "@comp/Mask";
 
+//// 从后端返回回来的结果
+interface Post {
+  user_id: number;
+  userName: string;
+  createdAt: Date;
+  photo: string;
+  title: string;
+}
+
 export default function Index() {
   let { postId } = useParams();
 
@@ -18,24 +27,24 @@ export default function Index() {
 
   function handleEdit() {
     setEdit(!edit);
-    console.log("asdkfsd");
   }
 
   async function handleDelete() {
     setShowPopUpBox(true);
   }
 
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState<Post>({} as Post);
 
   const [showBtn, setShowBtn] = useState<boolean>(false);
 
   const [showPopUpBox, setShowPopUpBox] = useState<boolean>(false);
 
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const divRef = useRef<HTMLDivElement>(null);
 
-  const { user } = useContext(Context);
+  const ctx = useContext(Context),
+    user = ctx?.user;
 
   useEffect(() => {
     (async () => {
@@ -43,6 +52,7 @@ export default function Index() {
         data.json()
       );
 
+      //// 还是需要存储到本地的
       if (user && user.id === data.user_id) {
         setShowBtn(true);
       }
@@ -52,6 +62,7 @@ export default function Index() {
       );
       data.userName = res.name;
       setPost(data);
+
       divRef.current &&
         (divRef.current.innerHTML = DOMPurify.sanitize(
           marked.parse(data.desce)
@@ -72,15 +83,14 @@ export default function Index() {
         返回上页
       </div>
       <div>
-        <img
-          src={
-            post.photo
-              ? post.photo
-              : "https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          }
-          alt=""
-          className="w-full h-[300px] object-cover rounded-[5px]"
-        />
+        {post.photo ? (
+          <img
+            src={post.photo}
+            alt=""
+            className="w-full h-[300px] object-cover rounded-[5px]"
+          />
+        ) : null}
+
         <div className="text-center text-3xl m-[10px] roboto-bold h-[40px] leading-[40px]">
           {post.title}
 
@@ -117,21 +127,26 @@ export default function Index() {
 
       {showPopUpBox ? (
         <>
-          <Mask></Mask>
+          <Mask handleClick={() => setShowPopUpBox(false)}></Mask>
           <PopUpBox
             content={"请问是否确认删除该博客"}
             btnArr={[
               {
                 async handleClick() {
-                  const data = await fetch(`/api/post/${postId}`, {
-                    method: "DELETE",
-                  }).then((data) => data.json());
-                  alert("删除成功");
-                  console.log(data);
-                  setShowPopUpBox(false);
-                  setTimeout(() => {
-                    navigate(-1);
-                  }, 1000);
+                  try {
+                    let data = await fetch(`/api/post/${postId}`, {
+                      method: "DELETE",
+                    });
+                    console.log(data);
+                    data = await data.json();
+                    alert("删除成功");
+                    setShowPopUpBox(false);
+                    setTimeout(() => {
+                      navigate(-1);
+                    }, 1000);
+                  } catch (error) {
+                    console.log(error);
+                  }
                 },
               },
               {

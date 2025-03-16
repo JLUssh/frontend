@@ -20,10 +20,12 @@ export default function PopUpBox({ content, btnArr }) {
 
   return (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 p-4 text-white rounded-sm z-[60]">
-      <p>{content}</p>
-      <div className="btn flex flex-1">
-        {btnArr.map((item) => (
-          <button onClick={item.handleClick}>{item.content}</button>
+      <p className="mb-5">{content}</p>
+      <div className="btn flex flex-1 gap-2 justify-end">
+        {btnArr.map((item, idx) => (
+          <button key={idx} onClick={item.handleClick}>
+            {item.content}
+          </button>
         ))}
       </div>
     </div>

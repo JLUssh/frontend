@@ -16,10 +16,11 @@ const Index: React.FC = () => {
   const [password, setPassword] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
-  function handleFile(e) {
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     // console.log(e.target.files[0]);
     //从FileList获取第一个File Object
-    setFile((e.target as HTMLInputElement).files[0]);
+    e.target.files;
+    setFile(e.target.files?.[0]);
   }
 
   async function handleSubmit(e: FormEvent) {
